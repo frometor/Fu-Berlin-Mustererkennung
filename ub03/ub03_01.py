@@ -3,7 +3,24 @@ import numpy as np
 import scipy.stats as stats
 import math
 
+#functions
+#gets row(of chicken_csv) and a list of (means,sigmas) 
+#and returns the best class for that row
+def returnClass(row,list):
+    counter = 0    
+    safewkt=0
+    safeclass = 0
+    for x in range(0,5):
+        counter += 1
+        wkt = stats.norm.pdf(row[1],meanAndSigma[x][0],meanAndSigma[x][1])
+        if (safewkt < wkt):
+            safewkt = wkt
+            safeclass = x
+    return safeclass
+ 
 
+
+#exercise 1a and b)
 csv = np.genfromtxt('chickwts_training.csv', delimiter=",")
 array0= []
 array1= []
@@ -20,7 +37,7 @@ cnt3=0
 cnt4=0
 cnt5=0
 
-x = np.linspace(0,500,5000)
+x = np.linspace(100,400,5000)
 
 for i in range(len(csv)):
     if (csv[i][2] == 0):
@@ -49,64 +66,77 @@ array3np=np.array(array3)
 array4np=np.array(array4)
 array5np=np.array(array5)
 
-apriori0=float(cnt0)/len(csv)
-print('Klasse0 = rot')
+meanAndSigma = []
+
+print('class0 = red')
 print('Erwartungswert 0: ',np.mean(array0np[:,1]))
 print('Standartabweichung 0: ',np.std(array0np[:,1]))
-print('A-Priori 0:',(apriori0))
+print('A-Priori 0:',(float(cnt0)/len(csv)))
 mean= np.mean(array0np[:,1])
-sigma= np.std(array0np[:,1])
-plt.plot(x,stats.norm.pdf(x,mean,sigma)*apriori0,c='r')
+sigma= math.sqrt(mean)
+meanAndSigma.append((mean,sigma))
+plt.plot(x,stats.norm.pdf(x,mean,sigma),c='red')
 
-apriori1=float(cnt1)/len(csv)
-print('Klasse1 = blau')
+print('class1 = blue')
 print('Erwartungswert 1: ',np.mean(array1np[:,1]))
 print('Standartabweichung 1: ',np.std(array1np[:,1]))
-print('A-Priori 1:',(apriori1))
+print('A-Priori 0:',(float(cnt1)/len(csv)))
 mean= np.mean(array1np[:,1])
-sigma= np.std(array1np[:,1])
-plt.plot(x,stats.norm.pdf(x,mean,sigma)*apriori1,c='b')
+sigma= math.sqrt(mean)
+meanAndSigma.append((mean,sigma))
+plt.plot(x,stats.norm.pdf(x,mean,sigma),c='b')
 
-apriori2=float(cnt2)/len(csv)
-print('Klasse2 = gruen')
+print('class2 = green')
 print('Erwartungswert 2: ',np.mean(array2np[:,1]))
 print('Standartabweichung 2: ',np.std(array2np[:,1]))
-print('A-Priori 2:',(apriori2))
+print('A-Priori 0:',(float(cnt2)/len(csv)))
 mean= np.mean(array2np[:,1])
-sigma= np.std(array2np[:,1])
-plt.plot(x,stats.norm.pdf(x,mean,sigma)*apriori2,c='g')
+sigma= math.sqrt(mean)
+meanAndSigma.append((mean,sigma))
+plt.plot(x,stats.norm.pdf(x,mean,sigma),c='green')
 
-apriori3=float(cnt3)/len(csv)
-print('Klasse3 = schwarz')
+print('class3 = black')
 print('Erwartungswert 3: ',np.mean(array3np[:,1]))
 print('Standartabweichung 3: ',np.std(array3np[:,1]))
-print('A-Priori 3:',(apriori3))
+print('A-Priori 0:',(float(cnt3)/len(csv)))
 mean= np.mean(array3np[:,1])
-sigma= np.std(array3np[:,1])
-plt.plot(x,stats.norm.pdf(x,mean,sigma)*apriori3,c='black')
+sigma= math.sqrt(mean)
+meanAndSigma.append((mean,sigma))
+plt.plot(x,stats.norm.pdf(x,mean,sigma),c='black')
 
-apriori4=float(cnt4)/len(csv)
-print('Klasse3 = gelb')
+print('class4 = yellow')
 print('Erwartungswert 4: ',np.mean(array4np[:,1]))
 print('Standartabweichung 4: ',np.std(array4np[:,1]))
-print('A-Priori 4:',(apriori4))
+print('A-Priori 0:',(float(cnt4)/len(csv)))
 mean= np.mean(array4np[:,1])
-sigma= np.std(array4np[:,1])
-plt.plot(x,stats.norm.pdf(x,mean,sigma)*apriori4,c='y')
+sigma= math.sqrt(mean)
+meanAndSigma.append((mean,sigma))
+plt.plot(x,stats.norm.pdf(x,mean,sigma),c='yellow')
 
-apriori5=float(cnt5)/len(csv)
-print('Klasse3 = orange')
+print('class5 = orange')
 print('Erwartungswert 5:',np.mean(array5np[:,1]))
 print('Standartabweichung 5: ',np.std(array5np[:,1]))
-print('A-Priori 5:',(apriori5))
+print('A-Priori 0:',(float(cnt5)/len(csv)))
 mean= np.mean(array5np[:,1])
-sigma= np.std(array5np[:,1])
-plt.plot(x,stats.norm.pdf(x,mean,sigma)*apriori5,c='orange')
+sigma= math.sqrt(mean)
+meanAndSigma.append((mean,sigma))
+plt.plot(x,stats.norm.pdf(x,mean,sigma),c='orange')
+
+plt.show()
 
 
-#print(array0np[:,1])
-#sliceofArray0 = array0np[:,1]   
+
+# exercise 1c)
+csv = np.genfromtxt('chickwts_testing.csv', delimiter=",")
+confusionMatrix = [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]]
+
+
+for row in csv:
+    predicted_class = returnClass(row,meanAndSigma)
+    confusionMatrix[predicted_class][int(row[2])] += 1
+
+print('\n\n')
+print('confusionmatrix:')
+for row in confusionMatrix:
+    print(row)
     
-#print(sliceofArray0)
-#print(np.std(csv,axis=0))
-#print(csv.shape)
