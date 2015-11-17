@@ -136,13 +136,20 @@ plt.show()
 csv = np.genfromtxt('chickwts_testing.csv', delimiter=",")
 confusionMatrix = [[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0],[0,0,0,0,0,0]]
 
-
+classifikationquality = 0.0
+counterall = 0.0
 for row in csv:
+    counterall += 1    
     predicted_class = returnClass(row,meanAndSigma)
     confusionMatrix[int(row[2])][predicted_class] += 1
+    if (int(row[2]) == predicted_class):
+        classifikationquality += 1
 
+        
 print('\n\n')
 print('confusionmatrix:')
 for row in confusionMatrix:
     print(row)
+
+print('classifikationqualtiy: '+ str(classifikationquality/counterall))       
     
