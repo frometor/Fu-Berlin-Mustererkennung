@@ -8,6 +8,7 @@ Created on Sun Nov 15 19:02:42 2015
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy.stats as stats
+import matplotlib.patches as mpatches
 
 def s(ux_mean,uy_mean,ux,uy):
     sSpeicher = 0
