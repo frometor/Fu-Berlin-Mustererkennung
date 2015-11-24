@@ -15,7 +15,7 @@ colors = ['red','black','blue']
 # euklidische distanz
 # dist = numpy.linalg.norm(a-b)
 def distance_euk(x,y,c):
-    return np.sqrt((x-c[0])**2 + (y-c[1])**2)    
+    return ((x-c[0])**2 + (y-c[1])**2)    
 
 
 # finds the new centers for the cluster
