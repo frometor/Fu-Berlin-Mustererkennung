@@ -23,7 +23,7 @@ qual=wine['quality']
 features=['fixed acidity','volatile acidity','citric acid','residual sugar','chlorides','free sulfur dioxide','total sulfur dioxide','density','pH','sulphates','alcohol']
 
 iters= list(it.combinations(features,1))
-#print('iters',iters)
+print('iters',iters)
 
 
 feat=wine[iters[0][0]]
@@ -33,18 +33,23 @@ feat=wine[iters[0][0]]
 
 lm = LinearRegression()
 
-tmp = []
-for i in feat:
-    tmp.append([i])
+
+
+for j in range (0,len(feat)):
+    tmp = []
+    #dreht die Liste um 1599,1 zu 1,1599
+    feat=wine[iters[j][0]]
+    for i in feat:
+        tmp.append([i])
     
-lm.fit(tmp,qual)
-prediction = lm.predict(tmp)
-p = sum(np.square(qual-prediction))
-plt.scatter(1,p)
-plt.show()
+    lm.fit(tmp,qual)
+    prediction = lm.predict(tmp)
+    p = sum(np.square(qual-prediction))
+    plt.scatter(1,p)
+    plt.show()
 
 
 
 
 #print (lm.intercept_)
-print (lm.coef_)
+#print (lm.coef_)
