@@ -42,6 +42,10 @@ plt.plot(x1,y1,'x',c='red')
 plt.plot(x2,y2,'x',c='blue')
 plt.plot(x3,y3,'x',c='green')
 
+plt.show()
+plt.plot(x1,y1,'x',c='red')
+plt.plot(x2,y2,'x',c='blue')
+plt.plot(x3,y3,'x',c='green')
 
 #2_b)
 new_covarianzmatrix1 = np.cov(x1,y1)
@@ -79,6 +83,9 @@ for xyTupel in array03np:
     u1.append((np.dot(np.dot(xyTupel.T,new_covarianzmatrix1),xyTupel)))
     u2.append((np.dot(np.dot(xyTupel.T,new_covarianzmatrix2),xyTupel)))
     u3.append((np.dot(np.dot(xyTupel.T,new_covarianzmatrix3),xyTupel)))
+
+
+
 
 ax = plt.subplot()
 plt.plot([(array03[s(u1_mean,u2_mean,u1,u2)][0]*-20),(array03[s(u1_mean,u2_mean,u1,u2)][0])*20],[(array03[s(u1_mean,u2_mean,u1,u2)][1])*-20,(array03[s(u1_mean,u2_mean,u1,u2)][1])*20],c='#800080')
