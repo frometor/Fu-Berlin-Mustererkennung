@@ -1,0 +1,18 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Dec  1 12:48:38 2015
+
+@author: erik
+"""
+#import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+
+#loadData
+fisherData = pd.read_csv("./fisher.txt",delimiter=",", dtype={'names': ('X', 'Y','Class'),\
+'formats': ('i4','i4', 'i4')},index_col=False, names = ['x', 'y','Class'])
+fisherData.head()
+
+ax=fisherData['x']
+ay=fischerData['y']
+print(ay)
