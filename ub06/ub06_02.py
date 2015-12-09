@@ -7,40 +7,15 @@ Created on Tue Dec  1 12:48:38 2015
 import matplotlib.pyplot as plt
 import numpy as np
 
-# perceptron-algorithem with x iterations
-def perceptron(xyClass,belongingClass):
-    k = 0    
-    x = 1000000
-    w = np.zeros(len(xyClass[0])) # len of one row
-    while k < x:
-        random = np.random.randint(0,len(xyClass))
-        randomVector = xyClass[random]
-        randomBelongingClass = belongingClass[random]
-        if (randomBelongingClass):
-            w,k = perceptonPositiv(w,randomVector,k)
-        else:
-            w,k = perceptonNegativ(w,randomVector,k)
-    return w
     
-    
-def perceptonPositiv(w,x,k):
-    if(w.dot(x) >= 0):
-        return w,k
-    else:
-        return w + x ,k+1
+def schnittpunktGauss(mean0,mean1,sigma0,sigma1):
+    p = (2*(mean1*sigma0**2 - mean0*sigma1**2) / (sigma0**2 - sigma1**2))
+    q = (mean0**2 * sigma1**2 - mean1**2 * sigma0**2 - 2*np.log(sigma1/sigma0) * sigma0**2 * sigma1**2) / (sigma1**2 - sigma0**2 )  
+    x1 = -p/2 + np.sqrt((p/2)**2 - q) 
+    x2 = -p/2 - np.sqrt((p/2)**2 - q)
+    return x1,x2
 
-def perceptonNegativ(w,x,k):        
-    if (w.dot < 0):
-        return w,k
-    else:        
-        return w - x, k+1
-    
-    
-def normalize(vector):
-    sum = 0    
-    for x in vector:
-        sum += np.abs(x)
-    return vector / np.sqrt(sum) 
+
 #----------------------------- main -----------------------------
     
 # loadData
@@ -80,12 +55,37 @@ cov0 = np.cov(x0,y0)
 cov1 = np.cov(x1,y1)
 
 # compute the fisher discriminant and plot it (graph of it)
-y = perceptron(allxy,allClass)
-plt.plot( (0,y[0]) , (0,y[1]) , color="cyan")
+skalar = 1
+y = skalar * np.dot((np.linalg.inv(cov0+cov1)), (mean0-mean1))
+plt.plot( (-y[0]*2000,y[0]*2000) , (-y[1]*2000,y[1]*2000) , color="cyan")
+
+# compute new mean
+newMean0 = np.dot(mean0,y)
+newMean1 = np.dot(mean1,y)
+
+# compute sigma for projected data
+sigma0 = np.dot(np.dot(y.T,cov0),y)
+sigma1 = np.dot(np.dot(y.T,cov1),y)
+
+# compute the intersection of both n-pdf
+x1,x2 = schnittpunktGauss(newMean0,newMean1,sigma0,sigma1)
+print "Schnittpunkt1 :",x1
+print "Schnittpunkt2 :",x2
+
+# projekt the intersection-points onto the line
+projektX1 = np.dot(np.dot(x1,y),x1)
+projektX2 = np.dot(np.dot(x2,y),x2)
+
+print "Schnittpunkt1 projeziert:",projektX1
+print "Schnittpunkt2 projeziert:",projektX2
+
+plt.plot(projektX1[0],projektX1[1],'bo')
+plt.plot(projektX2[0],projektX2[1],'bo')
+
 
 # configureation of the plot, save the plot and show it
 plt.xlim(-250,250)
-plt.ylim(0,180)
+plt.ylim(-50,180)
 plt.savefig("LCA.png")
 plt.show()
 
