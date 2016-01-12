@@ -62,16 +62,19 @@ def logLikelyhood(x,y,beta):
 spiders = np.genfromtxt('spiders.txt',delimiter=",")
 data,sand, isSpider = [],[],[]
 
+# import data
 for row in spiders:
     sand.append(row[0])
     isSpider.append(row[1])
     data.append((1,row[0]))
 beta = np.zeros(len(data[0]))
-  
+
+# 2D  
 #plt.plot(sand,isSpider,'ro')
 
 beta =  gradientDescent(data,isSpider,beta,0.1)
 print ("beta", beta)
+# 3D
 print ("Log-Likelyhood Spiders: ", logLikelyhood(data,isSpider,beta)+1)
 print ("Log-Likelyhood beta0: ", logLikelyhood(data,isSpider,beta0))
 
@@ -87,11 +90,24 @@ ax.scatter(beta[0],beta[1],logLikelyhood(data,isSpider,beta),c="red",marker="o",
 #==============================================================================
 #  __plot-configs__
 #==============================================================================
+# 2D
 #plt.xlim(0.2,1.1)
 #plt.ylim(-0.1,1.1)
+##plt.xticks([])
+##plt.yticks([])
+#plt.xlabel("grain-size")
+#plt.ylabel("probability")
+#plt.savefig("spider_plot.png")
+# 3D
 ax.set_xlim3d(-100,100)
 ax.set_ylim3d(-100,100)
-
-
+ax.set_xlabel("beta0")
+ax.set_ylabel("beta1")
+ax.set_zlabel("computed beta")
+# hide the axes-numbers
+ax.set_xticks([])                               
+ax.set_yticks([])                               
+ax.set_zticks([])
 plt.savefig("3D_spiders_plot.png")
+
 plt.show()
